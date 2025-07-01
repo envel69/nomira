@@ -1,5 +1,44 @@
-# Vue 3 + Vite
+# Nomira
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Nomira est un projet open source développé par [envel69](https://github.com/envel69).  
+Ce projet vise à offrir une solution simple pour faire un tirage au sort parmi une liste d'utilisateurs.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Fonctionnalités
+
+- **Ajout, modification et suppression d'utilisateurs**
+- **Tirage au sort aléatoire d'un nom**
+- **Historique des tirages**
+- **Sauvegarde locale des listes (localStorage)**
+
+## Installation
+
+Clonez ce dépôt puis installez les dépendances nécessaires :
+
+```bash
+git clone https://github.com/envel69/nomira.git
+cd nomira
+npm install
+```
+
+## Utilisation
+
+Après avoir installé les dépendances, lance le projet avec la commande suivante :
+
+```bash
+npm run dev
+```
+
+Ouvre ensuite ton navigateur à l'adresse indiquée dans le terminal (par défaut : [http://localhost:5173](http://localhost:5173)).
+
+Pour effectuer un tirage au sort :
+1. Ajoute les utilisateurs dans la liste via l'interface.
+2. Clique sur le bouton **"Tirer au sort"** pour sélectionner un nom aléatoirement.
+
+
+
+## Structure du projet
+
+- `src/App.vue` : Composant principal de l'application.
+- `src/views/HomeView.vue` : Vue principale avec la logique de tirage.
+- `src/components/AttachmentUsers.vue` : Gestion de la liste des utilisateurs (ajout, modification, suppression).
+- `src/components/ListUsers.vue` : Affichage de la liste des utilisateurs.
