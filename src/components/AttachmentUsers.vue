@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Saisie des utilisateurs</h2>
+        <h2>Entrez votre nom</h2>
         <input v-model="nom" placeholder="Entrez un nom" @keyup.enter="addName" />
         <button @click="addName">Ajouter</button>
         <ul>
