@@ -2,33 +2,31 @@
     <div>
       <h1>Nomira</h1>
   
-      <AttachmentUsers @liste-validee="setUsers" />
+      <AttachmentUsers @list-validated="setUsers" />
   
-      <div v-if="utilisateurs.length > 0">
-        <ListUsers :utilisateurs="utilisateurs" />
+      <div v-if="users.length > 0">
+        <ListUsers :users="users" />
   
-        <button @click="Animation" :disabled="enCours">🎲 Tirer au sort</button>
+        <button @click="drawAnimation" :disabled="isDrawing">🎲 Tirage</button>
         <button @click="resetList" style="margin-left: 10px;">Réinitialiser</button>
   
-        <div v-if="enCours" class="animation-box">
-           En cours... <br />
-          {{ nomAnime }}
+        <div v-if="isDrawing" class="animation-box">
+          Tirage... <br />
+          {{ animatedName }}
         </div>
   
-        <p v-else-if="nomTire" class="nom-final">
-          Nom tiré : {{ nomTire }}
+        <p v-else-if="drawnName" class="final-name">
+          Nom tiré au sort: {{ drawnName }}
         </p>
       </div>
       
       <div v-else>
-        <p>La liste est vide.</p>
+        <p>Il n'y a plus de nom à tirer.</p>
       </div>
   
-      <div v-if="nomsTires.length > 0" style="margin-top: 20px;">
-        <h2>Noms déjà tirés :</h2>
-        
-          <li v-for="(n, i) in nomsTires" :key="i">{{ n }}</li>
-        
+      <div v-if="drawnNames.length > 0" style="margin-top: 20px;">
+        <h2>Les noms des personnes tirées:</h2>
+        <li v-for="(n, i) in drawnNames" :key="i">{{ n }}</li>
       </div>
     </div>
   </template>
@@ -37,66 +35,66 @@
   import { ref, onMounted } from 'vue'
   import AttachmentUsers from '../components/AttachmentUsers.vue'
   import ListUsers from '../components/ListUsers.vue'
-
-  const utilisateurs = ref([])
-  const nomTire = ref(null)
-  const nomsTires = ref([])
-  const nomAnime = ref('')
-  const enCours = ref(false)
+  
+  const users = ref([])
+  const drawnName = ref(null)
+  const drawnNames = ref([])
+  const animatedName = ref('')
+  const isDrawing = ref(false)
   let interval = null
   
   onMounted(() => {
-    const saved = localStorage.getItem('nomira_utilisateurs')
-    if (saved) utilisateurs.value = JSON.parse(saved)
+    const saved = localStorage.getItem('nomira_users')
+    if (saved) users.value = JSON.parse(saved)
   
-    const savedTires = localStorage.getItem('nomira_tires')
-    if (savedTires) nomsTires.value = JSON.parse(savedTires)
+    const savedDrawn = localStorage.getItem('nomira_drawn')
+    if (savedDrawn) drawnNames.value = JSON.parse(savedDrawn)
   })
   
-  function setUsers(liste) {
-    utilisateurs.value = liste
-    nomsTires.value = []
-    nomTire.value = null
-    localStorage.setItem('nomira_utilisateurs', JSON.stringify(liste))
-    localStorage.removeItem('nomira_tires')
+  function setUsers(list) {
+    users.value = list
+    drawnNames.value = []
+    drawnName.value = null
+    localStorage.setItem('nomira_users', JSON.stringify(list))
+    localStorage.removeItem('nomira_drawn')
   }
   
   function resetList() {
-    utilisateurs.value = []
-    nomsTires.value = []
-    nomTire.value = null
-    nomAnime.value = ''
-    enCours.value = false
+    users.value = []
+    drawnNames.value = []
+    drawnName.value = null
+    animatedName.value = ''
+    isDrawing.value = false
     clearInterval(interval)
-    localStorage.removeItem('nomira_utilisateurs')
-    localStorage.removeItem('nomira_tires')
+    localStorage.removeItem('nomira_users')
+    localStorage.removeItem('nomira_drawn')
   }
   
-  function Animation() {
-    if (utilisateurs.value.length === 0) return
+  function drawAnimation() {
+    if (users.value.length === 0) return
   
-    enCours.value = true
-    nomTire.value = ''
-    nomAnime.value = ''
+    isDrawing.value = true
+    drawnName.value = ''
+    animatedName.value = ''
   
     interval = setInterval(() => {
-      const index = Math.floor(Math.random() * utilisateurs.value.length)
-      nomAnime.value = utilisateurs.value[index]
-    },)
+      const index = Math.floor(Math.random() * users.value.length)
+      animatedName.value = users.value[index]
+    }, )
   
     setTimeout(() => {
       clearInterval(interval)
   
-      const i = Math.floor(Math.random() * utilisateurs.value.length)
-      const choisi = utilisateurs.value.splice(i, 1)[0]
+      const i = Math.floor(Math.random() * users.value.length)
+      const chosen = users.value.splice(i, 1)[0]
   
-      nomTire.value = choisi
-      nomsTires.value.push(choisi)
-      nomAnime.value = ''
-      enCours.value = false
+      drawnName.value = chosen
+      drawnNames.value.push(chosen)
+      animatedName.value = ''
+      isDrawing.value = false
   
-      localStorage.setItem('nomira_utilisateurs', JSON.stringify(utilisateurs.value))
-      localStorage.setItem('nomira_tires', JSON.stringify(nomsTires.value))
+      localStorage.setItem('nomira_users', JSON.stringify(users.value))
+      localStorage.setItem('nomira_drawn', JSON.stringify(drawnNames.value))
     }, 2000)
   }
   </script>
@@ -114,7 +112,7 @@
     animation: pulse 0.5s infinite alternate;
   }
   
-  .nom-final {
+  .final-name {
     font-size: 2.5rem;
     font-weight: bold;
     margin-top: 20px;
@@ -134,4 +132,3 @@
     }
   }
   </style>
-  

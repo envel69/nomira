@@ -1,14 +1,14 @@
 <template>
-    <div v-if="utilisateurs.length > 0">
+    <div v-if="users.length > 0">
         <h2>Liste des utilisateurs :</h2>
         <ul>
-            <li v-for="(nom, index) in utilisateurs" :key="index">{{ nom }}</li>
+            <li v-for="(name, index) in users" :key="index">{{ name }}</li>
         </ul>
     </div>
 </template>
 
 <script setup>
 defineProps({
-    utilisateurs: Array
+    users: Array
 })
 </script>
